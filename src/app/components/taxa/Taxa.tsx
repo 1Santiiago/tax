@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-export default function InterestCalculator() {
+export default function InterestCalculator({ Children }: any) {
   const [valorInicial, setValorInicial] = useState(0);
   const [taxa, setTaxa] = useState(0);
   const [dias, setDias] = useState(0);
@@ -137,6 +137,7 @@ export default function InterestCalculator() {
           </Button>
         </div>
 
+        {Children}
         {resultado !== null && (
           <>
             <div className="mt-4 text-center text-xl font-bold text-green-600">
