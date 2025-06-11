@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, Children } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -9,19 +9,20 @@ function ContaDias() {
   const hojeStr: string = new Date().toISOString().split("T")[0];
 
   const [dataInicial, setDataInicial] = useState<string>(hojeStr);
-  const [diasPassados, setDiasPassados] = useState<number>(0);
+  const [dataFinal, setDataFinal] = useState<string>(hojeStr);
+  const [diasEntre, setDiasEntre] = useState<number>(0);
 
   useEffect(() => {
     const calcularDias = () => {
-      const hojeDate: Date = new Date();
-      const inicioDate: Date = new Date(dataInicial + "T00:00:00");
-      const diferencaEmMs: number = hojeDate.getTime() - inicioDate.getTime();
-      const dias: number = Math.floor(diferencaEmMs / (1000 * 60 * 60 * 24));
-      setDiasPassados(dias);
+      const inicio = new Date(dataInicial + "T00:00:00");
+      const fim = new Date(dataFinal + "T00:00:00");
+      const diferencaMs = fim.getTime() - inicio.getTime();
+      const dias = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
+      setDiasEntre(dias);
     };
 
     calcularDias();
-  }, [dataInicial]);
+  }, [dataInicial, dataFinal]);
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4">
@@ -34,27 +35,32 @@ function ContaDias() {
 
         <CardContent>
           <div className="space-y-4">
-            <div>
-              <p>
-                <span className="font-semibold">Data atual</span> {hojeStr}
-              </p>
-              <p>
-                <span className="font-semibold">Quantidade de dias</span>{" "}
-                <span className="text-primary font-bold">{diasPassados}</span>
-              </p>
-            </div>
-
-            <Separator />
-
             <div className="space-y-2">
-              <Label htmlFor="data">Alterar data inicial:</Label>
+              <Label htmlFor="dataInicial">Data Inicial</Label>
               <Input
-                id="data"
+                id="dataInicial"
                 type="date"
                 value={dataInicial}
                 onChange={(e) => setDataInicial(e.target.value)}
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="dataFinal">Data Final</Label>
+              <Input
+                id="dataFinal"
+                type="date"
+                value={dataFinal}
+                onChange={(e) => setDataFinal(e.target.value)}
+              />
+            </div>
+
+            <Separator />
+
+            <p className="text-center text-lg font-semibold">
+              🗓️ Dias entre as datas:{" "}
+              <span className="text-primary font-bold">{diasEntre}</span>
+            </p>
           </div>
         </CardContent>
       </Card>

@@ -15,6 +15,7 @@ export default function InterestCalculator({ Children }: any) {
   const [resultado, setResultado] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState(false);
+  const [percentualSaque, setPercentualSaque] = useState(30);
 
   const calcular = () => {
     const ciclos = dias / intervalo;
@@ -118,6 +119,21 @@ export default function InterestCalculator({ Children }: any) {
             />
           </div>
         </div>
+
+        <div>
+          <Label htmlFor="percentualSaque" className="text-sm text-slate-600">
+            Porcentagem a sacar (%)
+          </Label>
+          <Input
+            id="percentualSaque"
+            type="number"
+            min={0}
+            max={100}
+            value={percentualSaque}
+            onChange={(e) => setPercentualSaque(Number(e.target.value))}
+            className="mt-1"
+          />
+        </div>
         <div className="flex gap-5">
           <Button
             onClick={
@@ -143,15 +159,36 @@ export default function InterestCalculator({ Children }: any) {
             <div className="mt-4 text-center text-xl font-bold text-green-600">
               💰 Valor final: US$ {resultado.toFixed(2)}
             </div>
+
             {cotacao !== null && (
               <>
                 <div className="mt-2 text-center font-semibold text-green-700">
-                  💰 Valor aproximado em reais: R$
+                  💰 Valor aproximado em reais: R${" "}
                   {(resultado * cotacao).toFixed(2)}
                 </div>
+
                 <div className="mt-2 text-center font-semibold text-green-700">
-                  📈 Juros mensais (30% do valor em reais): R$
-                  {(resultado * cotacao * 0.3).toFixed(2)}
+                  💸 Saque simulado (R$): R$
+                  {(resultado * cotacao * (percentualSaque / 100)).toFixed(2)}
+                </div>
+
+                <div className="mt-2 text-center font-semibold text-green-700">
+                  💸 Saque simulado (US$): US$
+                  {(resultado * (percentualSaque / 100)).toFixed(2)}
+                </div>
+
+                <div className="mt-2 text-center font-semibold text-blue-600">
+                  🧾 Valor restante (R$): R$
+                  {(
+                    resultado *
+                    cotacao *
+                    ((100 - percentualSaque) / 100)
+                  ).toFixed(2)}
+                </div>
+
+                <div className="mt-2 text-center font-semibold text-blue-600">
+                  💵 Valor restante (US$): US$
+                  {(resultado * ((100 - percentualSaque) / 100)).toFixed(2)}
                 </div>
               </>
             )}
